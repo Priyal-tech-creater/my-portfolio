@@ -6,11 +6,11 @@ export default async function handler(req, res) {
         });
     }
 
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
         return res.status(500).json({
-            error: "Chatbot is not configured yet."
+            error: "Gemini API key is missing in Vercel."
         });
     }
 
@@ -30,39 +30,57 @@ export default async function handler(req, res) {
 
     try {
         const response = await fetch(
-            "https://api.openai.com/v1/responses",
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
             {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${apiKey}`
+                    "x-goog-api-key": apiKey
                 },
                 body: JSON.stringify({
-                    model: "gpt-4.1-mini",
-                    instructions: "You are a friendly portfolio assistant for a BTech CSE student specializing in AI and Machine Learning. Skills include Python, HTML, CSS, NumPy, pandas, and scikit-learn basics. Projects include House Price Prediction and Email Spam Classification using TF-IDF and Naive Bayes. Answer concisely and never invent missing details.",
-                    input: message,
-                    max_output_tokens: 250
+                    system_instruction: {
+                        parts: [{
+                            text: `You are a friendly chatbot for a student's portfolio.
+The student studies BTech Computer Science Engineering with an AI and Machine Learning specialization.
+Skills: Python, HTML, CSS, NumPy, pandas, and scikit-learn basics.
+Projects: House Price Prediction and Email Spam Classification using TF-IDF and Naive Bayes.
+Answer in simple, friendly language. Keep replies concise.
+Never invent experience, results, links, or contact details.
+If information is missing, say it is not listed in the portfolio.`
+                        }]
+                    },
+                    contents: [{
+                        parts: [{ text: message.trim() }]
+                    }],
+                    generationConfig: {
+                        maxOutputTokens: 250
+                    }
                 })
             }
         );
 
+        const data = await response.json();
+
         if (!response.ok) {
-            console.error("OpenAI API status:", response.status);
+            console.error("Gemini API error:", response.status, data);
             return res.status(502).json({
-                error: "AI service unavailable. Check your API key and API account."
+                error: "Gemini could not answer. Check your API key, model access, and usage limits."
             });
         }
 
-        const data = await response.json();
+        const reply = data.candidates?.[0]?.content?.parts
+            ?.map(part => part.text || "")
+            .join("")
+            .trim();
 
         return res.status(200).json({
-            reply: data.output_text ||
-                "Sorry, I couldn't generate a reply."
+            reply: reply || "Sorry, I couldn't generate a reply. Please try again."
         });
     } catch (error) {
-        console.error("Chatbot error:", error.message);
+        console.error("Gemini connection error:", error.message);
         return res.status(500).json({
             error: "Connection error. Please try again."
         });
     }
 }
+
