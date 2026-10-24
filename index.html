@@ -102,5 +102,38 @@
 
 
     <script src="script.js"></script>
+    
+<section id="weather-section">
+  <h2>🌤️ Live Weather</h2>
+  <p>Check the current weather in any city.</p>
+
+  <div class="weather-search">
+    <input
+      type="text"
+      id="city-input"
+      placeholder="Enter city name, e.g. Jaipur"
+    />
+    <button id="weather-btn" type="button">
+      Search Weather
+    </button>
+  </div>
+
+  <p id="weather-status" role="status"></p>
+
+  <div id="weather-result" hidden>
+    <h3 id="weather-city"></h3>
+    <p id="weather-condition"></p>
+    <p>🌡️ Temperature: <span id="weather-temp"></span></p>
+    <p>💧 Humidity: <span id="weather-humidity"></span></p>
+    <p>💨 Wind speed: <span id="weather-wind"></span></p>
+  </div>
+
+  <p class="weather-credit">
+    Weather data by
+    <a href="https://open-meteo.com/" target="_blank"
+       rel="noopener noreferrer">Open-Meteo</a>
+  </p>
+</section>
+
 </body>
 </html>
