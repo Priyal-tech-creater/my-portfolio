@@ -68,6 +68,7 @@ chatForm.addEventListener("submit", async function (event) {
 });
 
 
+
 const weatherBtn = document.getElementById("weatherBtn");
 
 if (weatherBtn) {
@@ -87,7 +88,9 @@ if (weatherBtn) {
                 `https://wttr.in/${encodeURIComponent(city)}?format=j1`
             );
 
-            if (!response.ok) throw new Error("Weather unavailable");
+            if (!response.ok) {
+                throw new Error("Weather unavailable");
+            }
 
             const data = await response.json();
             const current = data.current_condition[0];
@@ -96,6 +99,7 @@ if (weatherBtn) {
                 `${city}: ${current.temp_C}°C, ${current.weatherDesc[0].value}. ` +
                 `Feels like ${current.FeelsLikeC}°C. Humidity: ${current.humidity}%.`;
         } catch (error) {
+            console.error("Weather error:", error);
             result.textContent =
                 "Unable to load weather. Please try again later.";
         }
