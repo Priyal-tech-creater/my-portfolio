@@ -181,6 +181,10 @@ async function searchWeather() {
     weatherButton.disabled = false;
   }
 }
+console.log("Weather button:", weatherButton);
+console.log("City input:", cityInput);
+console.log("Weather status:", weatherStatus);
+console.log("Weather result:", weatherResult);
 
 weatherButton.addEventListener("click", searchWeather);
 
