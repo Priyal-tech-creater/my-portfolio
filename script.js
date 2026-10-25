@@ -66,3 +66,37 @@ chatForm.addEventListener("submit", async function (event) {
         chatInput.focus();
     }
 });
+
+const weatherBtn = document.getElementById("weatherBtn");
+
+if (weatherBtn) {
+    weatherBtn.addEventListener("click", async function () {
+        const city = document.getElementById("weatherCity").value.trim();
+        const result = document.getElementById("weatherResult");
+
+        if (!city) {
+            result.textContent = "Please enter a city name.";
+            return;
+        }
+
+        result.textContent = "Loading weather...";
+
+        try {
+            const response = await fetch(
+                `https://wttr.in/${encodeURIComponent(city)}?format=j1`
+            );
+
+            if (!response.ok) throw new Error("Weather unavailable");
+
+            const data = await response.json();
+            const current = data.current_condition[0];
+
+            result.textContent =
+                `${city}: ${current.temp_C}°C, ${current.weatherDesc[0].value}. ` +
+                `Feels like ${current.FeelsLikeC}°C. Humidity: ${current.humidity}%.`;
+        } catch (error) {
+            result.textContent =
+                "Unable to load weather. Please try again later.";
+        }
+    });
+}

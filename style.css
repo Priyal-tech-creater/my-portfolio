@@ -370,5 +370,33 @@ body.dark-mode #chatMessages {
     }
 }
 
+.weather-section {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.weather-search {
+    margin: 20px 0;
+}
+
+.weather-search input,
+.weather-search button {
+    padding: 12px;
+    margin: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.weather-search button {
+    cursor: pointer;
+    background: #2563eb;
+    color: white;
+    border: none;
+}
+
+#weatherResult {
+    margin-top: 20px;
+}
+
 
 
