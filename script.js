@@ -67,6 +67,7 @@ chatForm.addEventListener("submit", async function (event) {
     }
 });
 
+
 const weatherBtn = document.getElementById("weatherBtn");
 
 if (weatherBtn) {
