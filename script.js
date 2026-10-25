@@ -14,7 +14,7 @@ themeButton.addEventListener("click", function () {
 const chatForm = document.getElementById("chatForm");
 const chatInput = document.getElementById("chatInput");
 const chatMessages = document.getElementById("chatMessages");
-const chatSend = document.getElementById("chatSend");s
+const chatSend = document.getElementById("chatSend");
 
 function addChatMessage(message, className) {
     const paragraph = document.createElement("p");
