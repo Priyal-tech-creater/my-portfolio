@@ -66,15 +66,18 @@ chatForm.addEventListener("submit", async function (event) {
         chatInput.focus();
     }
 });
+document.addEventListener("DOMContentLoaded", () => {
+    const button = document.getElementById("weatherBtn");
+    const input = document.getElementById("weatherCity");
+    const result = document.getElementById("weatherResult");
 
+    if (!button || !input || !result) {
+        console.error("Weather elements not found");
+        return;
+    }
 
-
-const weatherBtn = document.getElementById("weatherBtn");
-
-if (weatherBtn) {
-    weatherBtn.addEventListener("click", async function () {
-        const city = document.getElementById("weatherCity").value.trim();
-        const result = document.getElementById("weatherResult");
+    button.addEventListener("click", async () => {
+        const city = input.value.trim();
 
         if (!city) {
             result.textContent = "Please enter a city name.";
@@ -88,20 +91,21 @@ if (weatherBtn) {
                 `https://wttr.in/${encodeURIComponent(city)}?format=j1`
             );
 
-            if (!response.ok) {
-                throw new Error("Weather unavailable");
-            }
+            if (!response.ok) throw new Error("Weather request failed");
 
             const data = await response.json();
             const current = data.current_condition[0];
 
             result.textContent =
-                `${city}: ${current.temp_C}°C, ${current.weatherDesc[0].value}. ` +
-                `Feels like ${current.FeelsLikeC}°C. Humidity: ${current.humidity}%.`;
+                `${city}: ${current.temp_C}°C, ` +
+                `${current.weatherDesc[0].value}. ` +
+                `Feels like ${current.FeelsLikeC}°C. ` +
+                `Humidity: ${current.humidity}%.`;
         } catch (error) {
             console.error("Weather error:", error);
-            result.textContent =
-                "Unable to load weather. Please try again later.";
+            result.textContent = "Unable to load weather. Please try again.";
         }
     });
-}
+});
+
+
